@@ -1,0 +1,24 @@
+easy_admin:
+   entities:
+    Booking:
+        class: App\Entity\Booking
+        list:
+            title: 'Liste des réservations'
+            fields: [{ property: 'type', label: 'Type de rés.' }, { property: 'visitDate', label: 'Créée le' }{ property: 'purchaserEmail', label: 'Email acheteur' }, { property: 'createdAt', label: 'Créée le' },{ property: 'tickets', label: 'Tickets' }]
+            actions:        
+              - { name: 'search', label: 'Rechercher une réservation'}
+              - { name: 'new', label: 'Nouvelle réservation'}
+              - { name: 'edit', label: 'Editer'}
+              - { name: 'delete', label: 'Supprimer'}
+        form:  # <-- 'form' is applied to both 'new' and 'edit' views
+          fields:
+              - { property: 'pseudo', label: 'Nom d''utilisateur' }
+              - { property: 'lastName', label: 'NOM' }
+              - { property: 'firstName', label: 'Prénom' }
+              - { property: 'email', type: 'email', label: 'Adresse e-mail' }
+              - { property: 'password', label: 'Mot de passe (MD5)' }
+              - { property: 'pseudo', label: 'Nom d''utilisateur' }
+              - { property: 'points', label: 'Points' }
+    
+      #  - App\Entity\Booking
+      #  - App\Entity\Ticket

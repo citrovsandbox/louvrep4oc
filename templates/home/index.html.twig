@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block pageContent %}
+
+<div id="louvre_banner">
+    <h2>Welcome to the Louvre Museum ticketing platform</h2>
+    <div>
+        <button type="button" class="btn btn-primary" onClick="window.location.href = '/ticketing'">Buy</button>
+        <button type="button" class="btn btn-secondary" id="learnMoreBtn" onClick="onLearnMorePress()">Learn more</button>
+    </div>
+</div>
+
+<div id="prices_table_container">
+    <div class="prices_el">
+        <h3>Informations</h3>
+        <p>The Louvre Museum welcomes you every day, except tuesday and some public holidays (the 1st of May, the 1st of November et le 25th of December), from 9:00AM to 6:00PM, until 9:45 all thursdays and fridays. Rooms close from 5:30PM, from 9:30PM all thursdays and fridays.</p>
+    </div>
+    <div class="prices_el">
+        <h3>Pricing table</h3>
+        <table class="table table-light">
+            <thead class="thead-light">
+                <tr>
+                <th scope="col">Tickets</th>
+                <th scope="col">Whole day</th>
+                <th scope="col">Half day (from 2:00PM)*</th>
+                </tr>
+            </thead>
+            <tbody class="tbody-light">
+                <tr>
+                <th scope="row">Standard ticket (from 12 years)</th>
+                <td>16 €</td>
+                <td>8 €</td>
+                </tr>
+                <tr>
+                <th scope="row">Senior ticket (from 60 years)</th>
+                <td>12 €</td>
+                <td>6 €</td>
+                </tr>
+                <tr>
+                <th scope="row">Reduced rate**</th>
+                <td>10 €</td>
+                <td>5 €</td>
+                </tr>
+                <tr>
+                <th scope="row">Child ticket (from 4 to 12 years)***</th>
+                <td>8 €</td>
+                <td>4 €</td>
+                </tr>
+            </tbody>
+        </table>
+        <small>(*)Admittance from 2:00PM - (**)Reduced rate: 10 euros - Tariff granted under some conditions (student, museum employee, staff member of culture ministry, soldier…) - (***)Free for children under 4 years</small>
+        <p>Each online ticket is nominative. Welcome staff could ask a proof at any time.</p>
+    </div>
+    <div class="prices_el">
+        <button type="button" class="btn btn-secondary" onClick="window.location.href = '/ticketing'">Buy now</button>
+    </div>
+</div>
+
+
+{% endblock %}
