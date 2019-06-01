@@ -44,6 +44,11 @@ class Booking
     private $purchaserEmail;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $price;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -62,6 +67,7 @@ class Booking
     {
         $this->tickets = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->reference = $this->_generateReference();
         $this->validated = false;
     }
 
@@ -130,6 +136,18 @@ class Booking
         return $this;
     }
 
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -183,5 +201,15 @@ class Booking
         }
 
         return $this;
+    }
+
+    private function _generateReference($length = 20) {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

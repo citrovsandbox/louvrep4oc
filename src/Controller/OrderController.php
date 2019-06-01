@@ -6,6 +6,7 @@ use App\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -16,34 +17,61 @@ use App\Entity\Booking;
 use App\Entity\Ticket;
 
 
-use App\Services\BookingChecker;
+use App\Services\BookingCheckerService;
+use App\Services\PricingService;
 
 class OrderController extends BaseController
 {
+    public function __construct (BookingCheckerService $BookingChecker, PricingService $PricingService) {
+        $this->bookingCheckerService = $BookingChecker;
+        $this->pricingService = $PricingService;
+    }
     /**
      * @Route("/order", name="order", methods={"POST"})
      */
-    public function index(Request $request, BookingChecker $BookingChecker)
+    public function index(Request $request)
     {
         $data = $this->getPostBody($request);
-        if($BookingChecker->check($data)) {
+        $data = json_decode($request->getContent(), true);
+        dump($data);
+        if($this->bookingCheckerService->check($data)) {
+            $Manager = $this->getDoctrine()->getManager();
+            $BookingRepo = 
+            $bookingInfo = $data["bookingInfo"];
+            $tickets = $data["tickets"];
 
-            // $NewBooking = new Booking();
-            // $NewBooking->setReference('XXXXXXXXXXXXXXXXXXXX');
-            // $NewBooking->setType($data["bookingInfo"]["ticketType"]);
-            // $NewBooking->setVisitDate($data["bookingInfo"]["visitDate"]);
-            // $NewBooking->setVisitorsNumber($data["bookingInfo"]["visitorsNumber"]);
-            // $NewBooking->setPurchaserEmail($data["bookingInfo"]["orderMailing"]);
+            $Booking = new Booking ();
+            $Booking->setType($bookingInfo["ticketType"]);
+            $Booking->setVisitDate(new \DateTime($bookingInfo["date"]));
+            $Booking->setVisitorsNumber($bookingInfo["visitorsNumber"]);
+            $Booking->setPurchaserEmail($bookingInfo["orderMailing"]);
+            $Booking->setPrice($this->pricingService->calc($Booking->getType(), $tickets));
+            $Manager->persist($Booking);
+            
+            $Manager->flush();
+            dump($Booking);
+            dump($Booking->getId());
 
-            // $this->getDoctrine()->getManager()->persist($NewBooking);
 
-            // $this->flush();
-            $res = $this->httpRes(200, json_encode($data, true), "{}");
+            foreach($tickets as $ticket) {
+                $Ticket = new Ticket();
+                $Ticket->setBooking($Booking);
+                $Ticket->setFirstName($ticket["firstName"]);
+                $Ticket->setLastName($ticket["lastName"]);
+                $Ticket->setBirthDate(new \DateTime($ticket["birthDate"][0]));
+                $Ticket->setCountry($ticket["country"]);
+                $Ticket->setReduced($ticket["reduction"]);
+                $Manager->persist($Ticket);
+            }
+
+            $Manager->flush();
+
+            $res = $this->httpRes(200, "Order registered. You can now pay safely.", "{'bookingReference':'". $Booking->getReference() ."', 'totalPrice':". $Booking->getPrice() ."}");
 
         } else {
-            $res = $this->httpRes(500, "An error occured. Please try again by restarting the form.", "{}");
+            $res = $this->httpRes(300, "The booking is not totally OK.", json_encode($this->bookingCheckerService->getErrors()));
+            
         }
-        
         return $res;
     }
 }

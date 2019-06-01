@@ -42,3 +42,8 @@ html, body {
 .prices_el h3 {
     color:white;
 }
+
+#root .form-control {
+    padding: 5px;
+    padding-left: 10px;
+}
