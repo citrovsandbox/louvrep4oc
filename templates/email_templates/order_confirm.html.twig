@@ -27,13 +27,13 @@
     <h2>THE LOUVRE MUSEUM</h2>
     <div id="pageContainer">
         <div><h3>Congratulations!</h3></div>
-        <div>Your order has been registered. Your booking reference is <b style="font-size:16px;">XJE872JD972HJD</b>. Please show this email at the entrance to enjoy the Louvre.</div>
+        <div>Your order has been registered. Your booking reference is <b style="font-size:16px;">{{ bookingReference }}</b>. Please show this email at the entrance to enjoy the Louvre.</div>
         <div style="text-align:left;">
         Here are the following persons on your order :<br>
         <ul>
-            <li>Bernard</li>
-            <li>Paul</li>
-            <li>Vincent</li>
+            {% for ticket in tickets %}
+                <li>{{ ticket.firstName }}  {{ ticket.lastName }}</li>
+            {% endfor %}
         </ul>
         </div>
         <div>Welcome to Paris !</div>

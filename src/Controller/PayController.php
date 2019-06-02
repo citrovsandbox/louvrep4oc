@@ -15,8 +15,16 @@ use Symfony\Component\Serializer\Serializer;
 
 use App\Entity\Booking;
 
+use App\Services\PaymentService;
+use App\Services\MailerService;
+
 class PayController extends BaseController
 {
+
+    public function __construct (MailerService $MailerService, PaymentService $PaymentService) {
+        $this->stripe = $PaymentService;
+        $this->mailer = $MailerService;
+    }
     /**
      * @Route("/pay", name="pay")
      */
@@ -25,34 +33,19 @@ class PayController extends BaseController
         $data = json_decode($request->getContent(), true);
         $client_token = $data["token"];
         $booking_ref = $data["bookingRef"];
-        $success = true;
-        $err = '';
-        try {
-            $Manager = $this->getDoctrine()->getManager();
-            $repository = $this->getDoctrine()->getRepository(Booking::class);
-            $Booking = $repository->findOneByReference($booking_ref);
+        $Manager = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(Booking::class);
+        $Booking = $repository->findOneByReference($booking_ref);
 
-            \Stripe\Stripe::setApiKey("sk_test_xWJBmr6VQPy0rBB2LRFfFUia00lqfnoclU");
-            $charge = \Stripe\Charge::create(array(
-                "amount" => $Booking->getPrice() * 100, // prix * en centimes
-                "currency" => "eur",
-                "source" => $data["token"],
-                "description" => "Commande effectuée via la boutique"
-            ));
-        } catch(\Stripe\Error\Card $e) {
-            $success = false;
-            $err = "Payment - $e";
-        }
-
-        if($success) {
+        if($this->stripe->makeTransaction($client_token, $Booking)) {
             $Booking->setValidated(true);
             $Manager->persist($Booking);
             $Manager->flush();
-            $res = $this->httpRes(200, "Payment is ok.", "{'sucess':". $success ."}");
+            $this->mailer->sendBooking($Booking);
+            $res = $this->httpRes(200, "Payment is ok.", "{}");
         } else {
-            $res = $this->httpRes(500, "Payment is NOT ok.", "{'sucess':". $success ."}");
+            $res = $this->httpRes(500, "Payment is NOT ok.", "{}");
         }
-        
         
         return $res;
     }
