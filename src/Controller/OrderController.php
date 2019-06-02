@@ -31,7 +31,7 @@ class OrderController extends BaseController
      */
     public function index(Request $request)
     {
-        $data = $this->getPostBody($request);
+        // $data = $this->getPostBody($request);
         $data = json_decode($request->getContent(), true);
         dump($data);
         if($this->bookingCheckerService->check($data)) {
@@ -54,11 +54,13 @@ class OrderController extends BaseController
 
 
             foreach($tickets as $ticket) {
+                $birthDate = is_array($ticket["birthDate"]) ? $ticket["birthDate"][0] : $ticket["birthDate"];
                 $Ticket = new Ticket();
                 $Ticket->setBooking($Booking);
                 $Ticket->setFirstName($ticket["firstName"]);
                 $Ticket->setLastName($ticket["lastName"]);
-                $Ticket->setBirthDate(new \DateTime($ticket["birthDate"][0]));
+                dump($ticket["birthDate"]);
+                $Ticket->setBirthDate(new \DateTime($birthDate));
                 $Ticket->setCountry($ticket["country"]);
                 $Ticket->setReduced($ticket["reduction"]);
                 $Manager->persist($Ticket);
@@ -66,7 +68,7 @@ class OrderController extends BaseController
 
             $Manager->flush();
 
-            $res = $this->httpRes(200, "Order registered. You can now pay safely.", "{'bookingReference':'". $Booking->getReference() ."', 'totalPrice':". $Booking->getPrice() ."}");
+            $res = $this->httpRes(200, "Order registered. You can now pay safely.", '{"bookingReference":"'. $Booking->getReference() .'", "totalPrice":'. $Booking->getPrice() .'}');
 
         } else {
             $res = $this->httpRes(300, "The booking is not totally OK.", json_encode($this->bookingCheckerService->getErrors()));

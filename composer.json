@@ -6,9 +6,11 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "easycorp/easyadmin-bundle": "^2.1",
+        "knplabs/knp-snappy-bundle": "^1.6",
         "nelmio/cors-bundle": "^1.5",
         "phpmailer/phpmailer": "^6.0",
         "sensio/framework-extra-bundle": "^5.1",
+        "stripe/stripe-php": "^6.37",
         "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
@@ -26,7 +28,8 @@
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
         "symfony/web-link": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "true/punycode": "^2.1"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

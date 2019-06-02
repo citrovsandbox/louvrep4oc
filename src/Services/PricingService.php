@@ -15,7 +15,8 @@ class PricingService {
 
     private function _calcTicket ($bookingType, $ticket) {
         $reduction = $ticket["reduction"];
-        $age = floor((time() - strtotime($ticket["birthDate"][0])) / 31556926);
+        $birthDate = is_array($ticket["birthDate"]) ? $ticket["birthDate"][0] : $ticket["birthDate"];
+        $age = floor((time() - strtotime($birthDate)) / 31556926);
         dump("Into _calcTicket");
         dump($age);
 
