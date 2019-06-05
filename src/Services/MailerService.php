@@ -9,15 +9,16 @@ class MailerService extends AbstractController{
     public function __construct (\Swift_Mailer $mailer) {
         $this->swift_mailer = $mailer;
     }
+
     public function sendBooking ($Booking) {
         $message = (new \Swift_Message('Congratulations!'))
         ->setFrom('citrovsandbox@gmail.com')
-        ->setTo('vmm1996@gmail.com')
+        ->setTo($Booking->getPurchaserEmail())
         ->setBody(
             $this->renderView(
                 'email_templates/order_confirm.html.twig',
                 [
-                    'name' => 'toto',
+                    'name' => 'order_confirm',
                     'bookingReference' => $Booking->getReference(),
                     'tickets' => $Booking->getTickets()
                 ]

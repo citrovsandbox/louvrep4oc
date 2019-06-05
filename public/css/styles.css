@@ -36,8 +36,9 @@ html, body {
 .prices_el {
     text-align:left;
     width:80%;
-    margin-bottom:10px;
+    margin-bottom:10px; margin-top:20px;
     color:white !important;
+    text-align:justify;
 }
 .prices_el h3 {
     color:white;
@@ -52,11 +53,17 @@ html, body {
     .App {
         width:80% !important;
     }
+    .custom-mobile-hidden {
+        display:none;
+    }
 }
 
 /*Mobile Query*/
 @media only screen and (max-width:480px) {
     .App {
         width:80% !important;
+    }
+    .custom-mobile-hidden {
+        display:none;
     }
 }

@@ -31,9 +31,7 @@ class OrderController extends BaseController
      */
     public function index(Request $request)
     {
-        // $data = $this->getPostBody($request);
         $data = json_decode($request->getContent(), true);
-        dump($data);
         if($this->bookingCheckerService->check($data)) {
             $Manager = $this->getDoctrine()->getManager();
             $BookingRepo = 
@@ -49,8 +47,6 @@ class OrderController extends BaseController
             $Manager->persist($Booking);
             
             $Manager->flush();
-            dump($Booking);
-            dump($Booking->getId());
 
 
             foreach($tickets as $ticket) {
@@ -71,7 +67,7 @@ class OrderController extends BaseController
             $res = $this->httpRes(200, "Order registered. You can now pay safely.", '{"bookingReference":"'. $Booking->getReference() .'", "totalPrice":'. $Booking->getPrice() .'}');
 
         } else {
-            $res = $this->httpRes(300, "The booking is not totally OK.", json_encode($this->bookingCheckerService->getErrors()));
+            $res = $this->httpRes(403, "The booking is not totally OK.", json_encode($this->bookingCheckerService->getErrors()));
             
         }
         return $res;

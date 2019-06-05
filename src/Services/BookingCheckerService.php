@@ -68,6 +68,10 @@ class BookingCheckerService {
         if(isset($bookingInfo["ticketType"])) {
             if(!$this->validator->ticketType($bookingInfo["ticketType"])) {
                 $this->addError("Ticket type is incorrect");
+            } else {
+                if(isset($bookingInfo["date"]) && $bookingInfo["ticketType"] === "full" && $this->validator->itsTheSameDateDude($bookingInfo["date"]) && $this->itsFourteenTimeOClockBaby()) {
+                    $this->addError("You cannot book full day ticket if it's 2pm past.");
+                }
             }
         } else {
             $this->addError("You didn't fill a ticket type");

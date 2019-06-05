@@ -29,7 +29,7 @@ class Booking
     private $type;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $visitDate;
 
@@ -162,12 +162,12 @@ class Booking
 
     public function getValidated(): ?bool
     {
-        return $this->reduced;
+        return $this->validated;
     }
 
-    public function setValidated(bool $reduced): self
+    public function setValidated(bool $validated): self
     {
-        $this->reduced = $reduced;
+        $this->validated = $validated;
 
         return $this;
     }

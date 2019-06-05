@@ -2,7 +2,16 @@
 
 namespace App\Services;
 
+use App\Services\LouvreService;
+use App\Entity\Booking;
+use Doctrine\ORM\EntityManagerInterface;
+
+
 class ValidatorService {
+    
+    public function __construct (EntityManagerInterface $EntityManagerInterface) {
+        $this->entityManager = $EntityManagerInterface;
+    }
 
     /**
      * Vérification du nombre de visiteurs
@@ -42,17 +51,23 @@ class ValidatorService {
      * cf: https://openclassrooms.com/fr/projects/35/assignment
      */
     public function bookingDate ($date) {
+        $state = true;
+
         $currentDate = date("c");
         $currentTimestamp = strtotime($currentDate);
         $currentddMM = date("d/M", $currentTimestamp);
         $weekDay = date("l", strtotime($date));
         $ddMM = date("d/M", strtotime($date));
+        $dateIsEnabled = $this->dateIsEnabled($date);
 
         if($weekDay === "Tuesday" || $ddMM === "01/May" || $ddMM === "01/Nov" || $ddMM === "25/Dec" || ($currentddMM !== $ddMM && strtotime($date) < $currentTimestamp)) {
-            return true;
-        } else {
-            return true;
+            $state = false;
         }
+        if($dateIsEnabled === false) {
+            $state = false;
+        }
+
+        return $state;
     }
     /**
      * Petit méthode pour check que ça va rentrer dans du varchar 255
@@ -69,6 +84,45 @@ class ValidatorService {
      */
     public function ticketReduction ($reduction) {
         if(is_bool($reduction)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function dateIsEnabled ($date) {
+
+        $repository = $this->entityManager->getRepository(Booking::class);
+        $Bookings = $repository->findByVisitDate(new \DateTime($date));
+        $nb = count($Bookings);
+
+        if($nb >= 1000) {
+            $dateIsEnabled = false;
+        } else {
+            $dateIsEnabled = true;
+        }
+        return $dateIsEnabled;
+    }
+
+    public function itsTheSameDateDude ($date_as_string) {
+        $currentDate = date("c");
+        $currentTimestamp = strtotime($currentDate);
+        $currentddMM = date("d/M", $currentTimestamp);
+        $ddMM = date("d/M", strtotime($date_as_string));
+        
+        if($ddMM === $currentddMM) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function itsFourteenTimeOClockBaby () {
+        $tz = 'Europe/Paris';
+        $date_time = new DateTime("now", new DateTimeZone($tz));
+        $hour = $date_time->format('H');
+
+        if ($hour < 14) {
             return true;
         } else {
             return false;
