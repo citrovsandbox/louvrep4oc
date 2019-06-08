@@ -58,7 +58,7 @@ class ValidatorServiceTest extends TestCase {
     public function testTicketReduction () {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $ValidatorService = new ValidatorService($entityManager);
-        $result = $ValidatorService->ticketReduction("sfzefz");
+        $result = $ValidatorService->ticketReduction(true);
         $this->assertEquals(true, $result);
     }
 }
