@@ -15,6 +15,7 @@ class ValidatorServiceTest extends TestCase {
      * visiteur.
      */
     public function testVisitorsNumber () {
+
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $ValidatorService = new ValidatorService($entityManager);
         $result = $ValidatorService->visitorsNumber(0);
@@ -45,7 +46,8 @@ class ValidatorServiceTest extends TestCase {
      * 
      */
     public function testTicketType () {
-        $ValidatorService = new ValidatorService();
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $ValidatorService = new ValidatorService($entityManager);
         $result = $ValidatorService->ticketType("full");
         $this->assertEquals(true, $result);
     }
@@ -55,11 +57,13 @@ class ValidatorServiceTest extends TestCase {
      * Ainsi, toute date en dehors du périmètre devra être systèmatiquement rejetée.
      */
     public function testBookingDate () {
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        //  
         $date = new \DateTime("2019-05-01");
         $date = $date->format('Y-m-d H:i:s');
-        $ValidatorService = new ValidatorService();
+        $ValidatorService = new ValidatorService($entityManager);
 
         $result = $ValidatorService->bookingDate($date);
-        $this->assertEquals(true, $result);
+        $this->assertEquals(false, $result);
     }
 }

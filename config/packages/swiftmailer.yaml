@@ -1,6 +1,6 @@
 swiftmailer:
     # url: '%env(MAILER_URL)%'
-    # spool: { type: 'memory' }
+    spool: { type: 'memory' }
     transport: gmail
     auth_mode: login
     port: 465
@@ -8,3 +8,10 @@ swiftmailer:
     username: 'citrovsandbox'
     password: 'Ricore06.'
     spool: { type: 'memory' }
+    # transport: mail
+    # auth_mode: login
+    # port: 465
+    # host: smtp.ionos.fr
+    # username: 'louvre@citrovsandbox.fr'
+    # password: 'Ricore06.'
+    # spool: { type: 'memory' }

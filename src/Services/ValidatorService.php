@@ -60,7 +60,7 @@ class ValidatorService {
         $ddMM = date("d/M", strtotime($date));
         $dateIsEnabled = $this->dateIsEnabled($date);
 
-        if($weekDay === "Tuesday" || $ddMM === "01/May" || $ddMM === "01/Nov" || $ddMM === "25/Dec" || ($currentddMM !== $ddMM && strtotime($date) < $currentTimestamp)) {
+        if($weekDay === "Tuesday" || $weekDay === "Sunday" || $ddMM === "01/May" || $ddMM === "01/Nov" || $ddMM === "25/Dec" || $ddMM === "14/Jul" || $ddMM === "08/May" || $ddMM === "11/Nov" || $ddMM === "01/Jan" ||  ($currentddMM !== $ddMM && strtotime($date) < $currentTimestamp)) {
             $state = false;
         }
         if($dateIsEnabled === false) {
@@ -122,7 +122,7 @@ class ValidatorService {
         $date_time = new DateTime("now", new DateTimeZone($tz));
         $hour = $date_time->format('H');
 
-        if ($hour < 14) {
+        if ($hour >= 14) {
             return true;
         } else {
             return false;

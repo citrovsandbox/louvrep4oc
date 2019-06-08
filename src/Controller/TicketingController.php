@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+
 class TicketingController extends AbstractController
 {
     /**
@@ -12,6 +14,16 @@ class TicketingController extends AbstractController
      */
     public function index()
     {
+        return $this->render('ticketing/index.html.twig', [
+            'controller_name' => 'TicketingController',
+            'page_name' => 'ticketing'
+        ]);
+    }
+    /**
+     * @Route("/testmail", name="test")
+     */
+    public function test () {
+       
         return $this->render('ticketing/index.html.twig', [
             'controller_name' => 'TicketingController',
             'page_name' => 'ticketing'
