@@ -75,7 +75,6 @@ class BookingCheckerService {
         }
 
         if(sizeof($this->getErrors()) > 0) {
-            dump($this->getErrors());
             return false;
         } else {
             return true;
@@ -97,7 +96,6 @@ class BookingCheckerService {
                         $this->addError("Beneficiary #" . ($key + 1) . ": The first name cannot be longer than 255 characters");
                     }
                 } else {
-                    dump($key);
                     $this->addError("Beneficiary #" . ($key + 1) . ": No first name");
                 }
                 // Que le lastName est conforme
@@ -137,7 +135,6 @@ class BookingCheckerService {
         }
 
         if(sizeof($this->getErrors()) > 0) {
-            dump($this->getErrors());
             return false;
         } else {
             return true;

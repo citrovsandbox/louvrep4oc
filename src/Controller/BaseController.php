@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Serializer;
 class BaseController extends AbstractController
 {
     public function getPostBody (Request $request) {
-        dump($request);
         $data = json_decode(
             $request->getContent(),
             true

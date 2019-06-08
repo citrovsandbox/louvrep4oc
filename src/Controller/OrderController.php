@@ -55,7 +55,6 @@ class OrderController extends BaseController
                 $Ticket->setBooking($Booking);
                 $Ticket->setFirstName($ticket["firstName"]);
                 $Ticket->setLastName($ticket["lastName"]);
-                dump($ticket["birthDate"]);
                 $Ticket->setBirthDate(new \DateTime($birthDate));
                 $Ticket->setCountry($ticket["country"]);
                 $Ticket->setReduced($ticket["reduction"]);

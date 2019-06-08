@@ -17,8 +17,6 @@ class PricingService {
         $reduction = $ticket["reduction"];
         $birthDate = is_array($ticket["birthDate"]) ? $ticket["birthDate"][0] : $ticket["birthDate"];
         $age = floor((time() - strtotime($birthDate)) / 31556926);
-        dump("Into _calcTicket");
-        dump($age);
 
         if($age < 4) {
             return 0;

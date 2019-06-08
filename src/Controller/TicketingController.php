@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
 
+use \Mailjet\Resources;
 
 
-class TicketingController extends AbstractController
+
+class TicketingController extends BaseController
 {
     /**
      * @Route("/ticketing", name="ticketing")
@@ -23,23 +25,19 @@ class TicketingController extends AbstractController
      * @Route("/testmail", name="test")
      */
     public function test () {
-        $to = 'vmm1996@gmail.com';
-
-        $subject = 'Order confirmation';
-        
-        $headers = "From: Louvre Museum \r\n";
-        $headers .= "Reply-To: vmm1996@gmail.com \r\n";
-        $headers .= "CC: susan@example.com\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        
-        $message = '<p><strong>This is strong text</strong> while this is not.</p>';
-        
-        
-        mail($to, $subject, $message, $headers);
-        return $this->render('ticketing/index.html.twig', [
-            'controller_name' => 'TicketingController',
-            'page_name' => 'ticketing'
-        ]);
+            $sujet = 'Order confirmation';
+            $message = "Bonjour,
+            Ceci est un <strong>LONG</strong> message texte envoyé grâce à  php.
+            merci :)";
+            $destinataire = 'vmm1996@gmail.com';
+            $headers = "From: \"Louvre Museum\"<louvre@citrovsandbox.fr>\n";
+            $headers .= "Reply-To: louvre@citrovsandbox.fr\n";
+            $headers .= "Content-Type: text/html; charset=\"UTF-8\"";
+            
+            if(mail($destinataire,$sujet,$message,$headers)) {
+                return $res = $this->httpRes(403, "The mail is sent.", "{}");
+            } else {
+                return $res = $this->httpRes(403, "The mail is NOT sent.", "{}");
+            };
     }
 }
