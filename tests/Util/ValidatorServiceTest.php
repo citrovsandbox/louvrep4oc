@@ -2,6 +2,7 @@
 
 namespace App\Tests\Util;
 
+use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Services\ValidatorService;
 use PHPUnit\Framework\TestCase;
@@ -52,18 +53,12 @@ class ValidatorServiceTest extends TestCase {
         $this->assertEquals(true, $result);
     }
     /**
-     * La règle est la suivante :
-     * "Le musée est ouvert tous les jours sauf le mardi (et fermé les 1er mai, 1er novembre et 25 décembre)."
-     * Ainsi, toute date en dehors du périmètre devra être systèmatiquement rejetée.
+     * La réduction doit toujours être de type booléen
      */
-    public function testBookingDate () {
+    public function testTicketReduction () {
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        //  
-        $date = new \DateTime("2019-05-01");
-        $date = $date->format('Y-m-d H:i:s');
         $ValidatorService = new ValidatorService($entityManager);
-
-        $result = $ValidatorService->bookingDate($date);
-        $this->assertEquals(false, $result);
+        $result = $ValidatorService->ticketReduction("sfzefz");
+        $this->assertEquals(true, $result);
     }
 }
