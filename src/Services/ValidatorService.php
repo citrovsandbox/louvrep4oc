@@ -94,7 +94,13 @@ class ValidatorService {
 
         $repository = $this->entityManager->getRepository(Booking::class);
         $Bookings = $repository->findByVisitDate(new \DateTime($date));
-        $nb = count($Bookings);
+        
+        $nb = 0;
+        
+        foreach ($Bookings as $Booking) {
+            $tickets_nb = count($Booking->getTickets());
+            $nb += $tickets_nb;
+        }
 
         if($nb >= 1000) {
             $dateIsEnabled = false;
